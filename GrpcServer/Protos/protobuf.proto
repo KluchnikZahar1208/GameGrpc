@@ -1,0 +1,108 @@
+syntax = "proto3";
+
+import "google/protobuf/wrappers.proto";
+
+package game;
+
+option csharp_namespace = "GrpcServer.Protos";
+
+service Game {
+    rpc CreateUser (CreateUserRequest) returns (CreateUserResponse);
+    rpc CheckUserExists (CheckUserExistsRequest) returns (CheckUserExistsResponse);
+    rpc CreateMatch (CreateMatchRequest) returns (CreateMatchResponse);
+    rpc GetGamesList (GetGamesListRequest) returns (GetGamesListResponse);
+    rpc JoinGame (JoinGameRequest) returns (JoinGameResponse);
+    rpc MakeMove (MakeMoveRequest) returns (MakeMoveResponse);
+    rpc MakeTransaction (MakeTransactionRequest) returns (MakeTransactionResponse);
+    rpc GetUserBalance (GetUserBalanceRequest) returns (GetUserBalanceResponse);
+}
+
+message CreateUserRequest {
+    string username = 1;
+}
+
+message CreateUserResponse {
+    int32 user_id = 1;
+}
+
+message CheckUserExistsRequest {
+    string username = 1;
+}
+
+message CheckUserExistsResponse {
+    bool exists = 1;
+}
+
+message CreateMatchRequest {
+    double amount = 1;
+}
+
+message CreateMatchResponse {
+    MatchHistory match = 1;
+}
+
+message GetGamesListRequest {}
+
+message GetGamesListResponse {
+    repeated MatchHistory matches = 1;
+}
+
+message JoinGameRequest {
+    int32 match_id = 1;
+    int32 player_id = 2;
+    string move = 3;
+}
+
+message JoinGameResponse {
+    string message = 1;
+}
+
+message MakeMoveRequest {
+    int32 match_id = 1;
+    int32 player_id = 2;
+    string move = 3;
+}
+
+message MakeMoveResponse {
+    MatchHistory game = 1;
+}
+
+message MakeTransactionRequest {
+    int32 match_id = 1;
+}
+
+message MakeTransactionResponse {
+    string message = 1;
+}
+
+message GetUserBalanceRequest {
+    string username = 1;
+}
+
+message GetUserBalanceResponse {
+    double balance = 1;
+}
+
+message MatchHistory{
+    int32 id = 1;
+    google.protobuf.Int32Value player1_id = 2;
+    google.protobuf.StringValue player1_move = 3;
+    google.protobuf.Int32Value player2_id = 4;
+    google.protobuf.StringValue player2_move = 5;
+    google.protobuf.Int32Value winner_id = 6;
+    double stake_amount = 7;
+}
+
+message User{
+    int32 id = 1;
+    string username = 2;
+    double balance = 3;
+}
+
+message GameTransactions{
+    int32 id = 1;
+    int32 user_id = 2;
+    int32 match_id = 3;
+    double amount = 4;
+    string transaction_type = 5;
+}
